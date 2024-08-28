@@ -8,6 +8,7 @@ import Chat from './screen/Chat'              // Importamos las distintas pantal
 import Pdf from './screen/Pdf'
 import Profile from './components/home/Profile'
 import Classifier from "./screen/Classifier";
+import Order from "./screen/Order";
 
 // Crea el navegador de pestañas
 const Tab = createBottomTabNavigator();
@@ -28,7 +29,12 @@ function Tabs() {
             return <AntDesign name={iconName} size={size} color={color} />;
           } else if (route.name === 'Lector PDF') {
             iconName = focused ? 'document-text' : 'document-text-outline'; // Icono de PDF
+            return <AntDesign name={iconName} size={size} color={color} />;
+          } else if (route.name === 'Ordenador'){
+            iconName = focused ? 'form' : 'form'; // Icono 
+            return <AntDesign name={iconName} size={size} color={color} />;
           }
+
 
           // Devuelve el componente de icono
           return <Ionicons name={iconName} size={size} color={color} />;

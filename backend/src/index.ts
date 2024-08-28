@@ -84,7 +84,7 @@ app.post('/openapi', async (req: Request, res: Response) => {
   const prompt = ChatPromptTemplate.fromMessages([
     ["human", `Quiero que clasifiques el mensaje en dos partes por medio de la coma.
       Aquí están los datos: 
-      Antes de la coma - Codigo: ${userCode}
+      Antes de la coma - code: ${userCode}
       Despues de la coma - Valor: ${userValue} 
   
     Primero, convierte a binario el codigo ${userCode} y cuenta el número de letras que tiene el valor ${userValue}
@@ -118,7 +118,7 @@ app.post('/openapi', async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.error('Error en la solicitud a OpenAI:', error);
-    res.status(500).json({ error: 'Error en la solicitud a OpenAI' });
+    res.status(500).json({ error: 'No puedo generar una respuesta , porque solo tengo el entrenamiento en binario y contar vocales' });
   }
 });
 

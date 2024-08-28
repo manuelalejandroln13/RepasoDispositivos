@@ -7,30 +7,30 @@ import * as FileSystem from "expo-file-system";
 const serverIP = process.env.EXPO_PUBLIC_ServerIP;
 
 const Classifier = () => {
-  const [file, setFile] = useState({ canceled: true });
-  const [result, setResult] = useState("");
-  const [chips, setChips] = useState([]);
-  const [inputTags, setInputTags] = useState("");
-  const [charge, setCharge] = useState(true);
+  const [llamada, setLlamada] = useState('');
+  const [valor, setValor] = useState('');
+  const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    const defaultTags = [
-      { id: 1, text: "Economía", selected: true },
-      { id: 2, text: "Educación", selected: true },
-      { id: 4, text: "Deportes", selected: true },
-      { id: 5, text: "Seguridad", selected: true },
-      { id: 6, text: "Tecnología", selected: true },
-      { id: 7, text: "Salud", selected: true },
-    ];
-    setChips(defaultTags);
-  }, []);
+  const getResultFromOpenAPI = async () => {
+      try {
+          const dataToSend = { llamada, valor };
+          console.log("JSON to send:", JSON.stringify(dataToSend, null, 2));
 
-  const handleFilePicker = async () => {
-    const document = await ExpoDocumentPicker.getDocumentAsync({
-      type: "application/pdf",
-      multiple: false,
-    });
-    setFile(document);
+          const response = await fetch("http://192.168.43.160:3000/openapi", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ llamada, valor }),
+          });
+          const jsonData = await response.json();
+          console.log("JSON received:", JSON.stringify(jsonData, null, 2));
+
+          // Asegúrate de que la respuesta sea un arreglo, si el backend devuelve el historial
+          setResults(jsonData || []);
+      } catch (error) {
+          console.log(error);
+      }
   };
 
   const handleChipPress = (chipId) => {
@@ -122,38 +122,46 @@ const Classifier = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.containerButton}>
-        <Button title={"Selecciona el PDF"} onPress={handleFilePicker} />
-      </View>
-      <Text style={styles.text}>Seleccione las etiquetas de clasificación:</Text>
-      <View style={styles.chip}>
-        {chips.map((chip) => (
-          <Chip
-            key={chip.id}
-            onPress={() => handleChipPress(chip.id)}
-            mode={chip.selected ? "flat" : "outlined"}
-            selected={chip.selected}
-            style={{ margin: 5 }}
-          >
-            {chip.text}
-          </Chip>
-        ))}
-      </View>
-      <Text style={styles.text}>O ingrese etiquetas separadas por coma:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Etiqueta1, Etiqueta2, ..."
-        value={inputTags}
-        onChangeText={handleTagsInputChange}
-      />
-      <View style={styles.containerButton}>
-        <Button title={"Clasificador"} onPress={handleUpload} />
-      </View>
-      <View style={styles.response}>
-        <Text style={styles.text}>{result}</Text>
-      </View>
+        <Text style={styles.text}>
+            {"Ingrese el texto que desea conocer la clasificación"}
+        </Text>
+
+        <TextInput 
+            style={styles.input} 
+            value={llamada} 
+            onChangeText={setLlamada} 
+            placeholder="Ingrese el texto" 
+            placeholderTextColor="#888"
+        />
+        <TextInput 
+            style={styles.input} 
+            value={valor} 
+            onChangeText={setValor} 
+            placeholder="Ingrese el valor" 
+            placeholderTextColor="#888"
+        />
+
+        <TouchableOpacity style={styles.button} onPress={getResultFromOpenAPI}>
+            <Text style={styles.buttonText}>Enviar</Text>
+        </TouchableOpacity>
+
+        <Link href="/home" style={styles.button} >
+            <Text style={styles.buttonText}>Regresar</Text>
+        </Link>
+
+        <FlatList
+            data={results}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+                <View style={styles.resultContainer}>
+                    <Text style={styles.result}>Label: {item.label}</Text>
+                    <Text style={styles.result}>Valor: {item.valor}</Text>
+                </View>
+            )}
+            ListEmptyComponent={<Text style={styles.result}>No hay resultados.</Text>}
+        />
     </View>
-  );
+);
 };
 
 const styles = StyleSheet.create({

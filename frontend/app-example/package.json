@@ -16,8 +16,10 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "expo": "~50.0.3",
+    "expo-av": "~13.10.6",
     "expo-document-picker": "~11.10.1",
     "expo-file-system": "~16.0.6",
+    "expo-router": "^3.5.23",
     "expo-status-bar": "~1.11.1",
     "html-pdf": "^3.0.1",
     "openai": "^3.3.0",
@@ -27,8 +29,7 @@
     "react-native-paper": "^5.12.3",
     "react-native-splash-screen": "^3.3.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.19.6",
-    "expo-av": "~13.10.6"
+    "react-native-web": "~0.19.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

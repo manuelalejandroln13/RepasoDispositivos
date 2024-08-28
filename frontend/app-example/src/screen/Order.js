@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+
 import React, { useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, TextInput, FlatList } from "react-native";
 

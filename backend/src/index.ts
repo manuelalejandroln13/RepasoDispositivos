@@ -66,15 +66,13 @@ app.put("/nombres/:id", (req: Request, res: Response) => {
 //    ************      API Rest OpenAI Convert      ************
 app.post("/openapi", async (req: Request, res: Response) => {
   const prompt = ChatPromptTemplate.fromMessages([
-    ["human", "Convierte este numero {topic} en binario"],
+    ["human", "Convierte este numero {topic} en binario"], //prompt con marcador de posicion
   ]);
-  const model = new ChatOpenAI({});
-  const outputParser = new StringOutputParser();
-  const chain = prompt.pipe(model).pipe(outputParser);
-  const response = await chain.invoke({
-    topic: req.body.num,
-  });
-  res.send({ result: response });
+  const model = new ChatOpenAI({}); //instancia del modelo
+  const outputParser = new StringOutputParser(); //parsear la salida
+  const chain = prompt.pipe(model).pipe(outputParser); // encadenar el procesamiento
+  const response = await chain.invoke({ topic: req.body.num,  });
+  res.send({ result: response }); //enviar la respuesta al cliente
 });
 
 

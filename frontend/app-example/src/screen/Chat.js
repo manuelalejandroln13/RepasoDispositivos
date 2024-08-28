@@ -14,14 +14,12 @@ const Chat = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ num }),
+        body: JSON.stringify({ num }), //enviando el numero como json
       });
-      const jsonData = await response.json();
-      setResult(
-        jsonData.result
-      );
+      const jsonData = await response.json();  //parsear la respuesta json
+      setResult( jsonData.result ); //actualizar el estado con el resultado
     } catch (error) {
-      console.log(error);
+      console.log(error); //manejo de errores
     }
   };
 

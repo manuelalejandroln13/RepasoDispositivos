@@ -29,10 +29,9 @@ function Tabs() {
             return <AntDesign name={iconName} size={size} color={color} />;
           } else if (route.name === 'Lector PDF') {
             iconName = focused ? 'document-text' : 'document-text-outline'; // Icono de PDF
-            return <AntDesign name={iconName} size={size} color={color} />;
           } else if (route.name === 'Ordenador'){
-            iconName = focused ? 'form' : 'form'; // Icono 
-            return <AntDesign name={iconName} size={size} color={color} />;
+            iconName = focused ? 'ruler' : 'ruler'; // Icono  de regla para Ordenador
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           }
 
 

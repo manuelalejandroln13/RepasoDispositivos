@@ -13,6 +13,9 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT;
 const cors = require("cors");
+// Define `guardarData` como un arreglo vacío al inicio
+const guardarData: { label: string; valor: string }[] = [];
+
 
 app.use(
   cors({
@@ -73,6 +76,72 @@ app.post("/openapi", async (req: Request, res: Response) => {
   });
   res.send({ result: response });
 });
+
+
+//      *********** API Rest OpenAI Order  ******************
+app.post('/openapi', async (req: Request, res: Response) => {
+  const { llamada: userMessage, valor: userValue } = req.body;
+  const prompt = ChatPromptTemplate.fromMessages([
+    ["human", `Quiero que clasifiques el mensaje que y estimes ademas quiero que guardes un historial de las respuestas que entreges. Aquí están los datos:
+    - Mensaje: ${userMessage}
+    - Valor: ${userValue}
+
+    Primero, clasificas el mensaje si es que pertenece a uno de estos tres temas.
+    - Cine
+    - Pólitica    
+    - Religón
+    Finalmente, guardas el historial de respuestas que entregres. 
+    Proporciona la respuesta en el siguiente formato JSON:
+    {
+    "label": la etiqueta del tema que clasificaste entre las 3,
+    "valor": "el valor que te enviaron desde un inicio"
+    }`],
+  ]);
+  const model = new ChatOpenAI({});
+  const outputParser = new StringOutputParser();
+  const chain = prompt.pipe(model).pipe(outputParser);
+  try {
+    const response = await chain.invoke({
+      topic: userMessage,
+    });
+    let respuesta = response.trim();
+
+    // Eliminar delimitadores de bloque de código
+    if (respuesta.startsWith('```json\n') && respuesta.endsWith('\n```')) {
+      respuesta = respuesta.substring(8, respuesta.length - 4).trim();
+    }
+
+    try {
+      const respuestaJson = JSON.parse(respuesta);
+      guardarData.push(respuestaJson);
+      res.json(guardarData);
+    } catch (error) {
+      console.error('Error decodificando JSON:', error);
+      res.status(500).json({ error: 'Error decodificando la respuesta de OpenAI' });
+    }
+  } catch (error) {
+    console.error('Error en la solicitud a OpenAI:', error);
+    res.status(500).json({ error: 'Error en la solicitud a OpenAI' });
+  }
+});
+
+// Endpoint para clasificar texto
+app.post('/clasificar', (req: Request, res: Response) => {
+  const { valor, llamada: texto } = req.body;
+  if (!texto) {
+    return res.status(400).json({ error: 'No se proporcionó ningún texto.' });
+  }
+  const candidateLabels = ['Cine', 'Política', 'Religión'];
+  // Simulación de clasificación
+  const scores = candidateLabels.map(label => Math.random()); // Reemplaza esto con la lógica real de clasificación
+  const maxScoreIdx = scores.indexOf(Math.max(...scores));
+  const labelScore = candidateLabels[maxScoreIdx];
+  const respuestasData = { label: labelScore, valor };
+  guardarData.push(respuestasData);
+  res.json(respuestasData);
+});
+
+
 
 //    ************      API Rest OpenAI PDF      ************
 const fs = require("fs");

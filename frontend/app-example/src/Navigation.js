@@ -24,15 +24,12 @@ function Tabs() {
           } else if (route.name === 'OpenAI') {
             iconName = focused ? 'brain' : 'brain'; // Icono de OpenAI
             return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
-          } else if (route.name === 'Clasificador') {
+          } else if (route.name === 'Contador') {
             iconName = focused ? 'form' : 'form'; // Icono de lista
             return <AntDesign name={iconName} size={size} color={color} />;
           } else if (route.name === 'Lector PDF') {
             iconName = focused ? 'document-text' : 'document-text-outline'; // Icono de PDF
-          } else if (route.name === 'Ordenador'){
-            iconName = focused ? 'ruler' : 'ruler'; // Icono  de regla para Ordenador
-            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
-          }
+          } 
 
 
           // Devuelve el componente de icono
@@ -47,9 +44,9 @@ function Tabs() {
     >
       <Tab.Screen name='Profile' component={Profile} />
       <Tab.Screen name='OpenAI' component={Chat} />
-      <Tab.Screen name='Clasificador' component={Classifier} />
+      <Tab.Screen name='Contador' component={Classifier} />
       <Tab.Screen name='Lector PDF' component={Pdf} />
-      <Tab.Screen name='Ordenador' component={Order} />
+      
     </Tab.Navigator> 
   );
 }

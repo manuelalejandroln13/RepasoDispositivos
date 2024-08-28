@@ -50,6 +50,7 @@ function Tabs() {
       <Tab.Screen name='OpenAI' component={Chat} />
       <Tab.Screen name='Clasificador' component={Classifier} />
       <Tab.Screen name='Lector PDF' component={Pdf} />
+      <Tab.Screen name='Ordenador' component={Order} />
     </Tab.Navigator> 
   );
 }

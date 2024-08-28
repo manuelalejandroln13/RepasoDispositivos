@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Linking } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import coverImage from '../../../assets/cover.png'; //importar imagenes locales caso contrario y sea solo url se borra esto
-import {Video} from 'expo-av';
+import { Video } from 'expo-av'; // Importar el componente Video
+import coverImage from '../../../assets/cover.png'; // Importar imagen local
 
 const ProfileScreen = () => {
   const facebook = <FontAwesome name="facebook" size={30} color="black" />;
@@ -12,12 +12,9 @@ const ProfileScreen = () => {
   const discord = <FontAwesome name="android" size={30} color="black" />;
   const linkedin = <FontAwesome name="linkedin" size={30} color="black" />;
 
-
   const handleOpenURL = async (url) => {
-    // Verifica si el enlace se puede abrir
     const supported = await Linking.canOpenURL(url);
     if (supported) {
-      // Abre el enlace
       await Linking.openURL(url);
     } else {
       console.log(`No se puede abrir el enlace: ${url}`);
@@ -28,17 +25,22 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       {/* Portada */}
       <Image
-        source={coverImage}  //usa la imagen de portada local
+        source={coverImage}
         style={styles.coverImage}
       />
       
-      {/* Foto de perfil */}
+      {/* Video de perfil */}
       <View style={styles.profileImageContainer}>
-        <Image
-          source={require('../../../assets/Manuel.mp4')}
-          style={styles.profileVideo}
+        <Video
+          source={require('../../../assets/Manuel.mp4')} // video .mp4
+          rate={1.0}
+          volume={1.0}
+          isMuted={false}
+          resizeMode="cover"
+          shouldPlay
+          isLooping
+          style={styles.profileVideo} // Cambia la propiedad para adaptar el estilo al video
         />
-        
       </View>
 
       {/* Nombre del usuario */}
@@ -64,7 +66,6 @@ const ProfileScreen = () => {
         <TouchableOpacity style={styles.socialButton} onPress={() => handleOpenURL('https://ec.linkedin.com/')}>
           {linkedin}
         </TouchableOpacity>
-        
       </View>
     </View>
   );
@@ -82,18 +83,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 150,
     left: '50%',
-    marginLeft: -100, // Half of the profile image width
-    borderRadius: 50, // Half of the profile image width/height
+    marginLeft: -100,
+    borderRadius: 100, // Cambia a 100 para mantener la forma circular
     overflow: 'hidden',
     borderWidth: 2,
-    borderRadius: 100,
     borderColor: 'white',
-    elevation: 100, // For Android shadow
+    elevation: 100,
   },
-  profileImage: {
+  profileVideo: {
     width: 200,
     height: 200,
-    borderRadius: 100,
+    borderRadius: 100, // Mantén la forma circular
   },
   userName: {
     marginTop: 160,

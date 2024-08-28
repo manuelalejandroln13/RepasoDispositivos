@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Linking } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import coverImage from '../../../assets/cover.png'; //importar imagenes locales caso contrario y sea solo url se borra esto
-
+import {Video} from 'expo-av';
 
 const ProfileScreen = () => {
   const facebook = <FontAwesome name="facebook" size={30} color="black" />;
@@ -35,8 +35,8 @@ const ProfileScreen = () => {
       {/* Foto de perfil */}
       <View style={styles.profileImageContainer}>
         <Image
-          source={require('../../../assets/Manuel.gif')}
-          style={styles.profileImage}
+          source={require('../../../assets/Manuel.mp4')}
+          style={styles.profileVideo}
         />
         
       </View>
